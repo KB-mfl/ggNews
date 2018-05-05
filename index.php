@@ -1,3 +1,25 @@
+<?php
+date_default_timezone_set('PRC');
+$hostname = 'localhost';
+$database = 'ggNews';
+$user = 'root';
+$pwd = 'root';
+
+try {
+    $conn = new PDO('mysql:host='.$hostname.';dbname='.$database,$user,$pwd);
+    $conn->exec('SET NAMES UTF8');
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // echo "Connected successfully";
+}
+catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+
+$sql = $conn->prepare('SELECT * FROM news WHERE `deleted_time` IS NULL;');
+$sql->execute();
+$news = $sql->fetchall(PDO::FETCH_ASSOC);
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,13 +49,17 @@
                 <img src="resourses/carousel01.jpeg" width="600" height="300">
             </div>
             <div class="news-list">
+                <?php
+                foreach ($news as $item) { ?>
                 <div class="item">
-                    <p class="title">title</p>
+                    <p class="title"><?php echo $item['title']; ?></p>
                     <div class="info">
-                        <span>user</span>
-                        <span>time</span>
+                        <span><?php echo $item['author']; ?></span>
+                        <span><?php echo $item['created_time']; ?></span>
                     </div>
                 </div>
+                <?php
+                } ?>
             </div>
         </div>
     </div>
