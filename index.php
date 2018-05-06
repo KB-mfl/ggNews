@@ -57,6 +57,7 @@ $news = $sql->fetchall(PDO::FETCH_ASSOC);
                         <span><?php echo $item['author']; ?></span>
                         <span><?php echo $item['created_time']; ?></span>
                     </div>
+                    <hr>
                 </div>
                 <?php
                 } ?>
@@ -93,6 +94,7 @@ $news = $sql->fetchall(PDO::FETCH_ASSOC);
     }
     .sidebar li:hover {
         background: #3cafe9;
+        cursor: pointer;
         color: #ffffff;
     }
     .content {
@@ -105,21 +107,51 @@ $news = $sql->fetchall(PDO::FETCH_ASSOC);
     }
     .search input {
         width: 500px;
-        height: 24px;
+        height: 26px;
+        line-height: 26px;
+        padding: 0;
+        font-size: 16px;
+        outline: 0 none;
     }
     .search button {
         width: 80px;
-        height: 30px;
+        height: 28px;
+        line-height: 28px;
+        color: #3cafe9;
+        background-color: #ffffff;
+        box-shadow: 0px 0px 2px 2px #62bfee;
+        border: 0;
+        border-radius: 2px;
+        outline: 0 none;
+        transition: background-color 120ms, color 120ms, box-shadow 120ms;
+    }
+    .search button:hover {
+        cursor: pointer;
+        color: #ffffff;
+        background-color: #3cafe9;
     }
     .carousel {
         margin-top: 30px;
     }
     .item .title {
         font-size: 18px;
+        font-weight: bold;
         margin-bottom: 12px;
+        transition: color 200ms;
+    }
+    .item .title:hover {
+        cursor: pointer;
+        color: #3081aa;
     }
     .item .info span {
         margin-right: 6px;
+        color: gray;
+    }
+    .item hr {
+        border: 0;
+        height: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     }
 </style>
 </html>
