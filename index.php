@@ -80,7 +80,20 @@ function getRecommend($conn) {
             var curTab = document.querySelector('.active');
             curTab.className = curTab.className.replace('active', '');
             this.className += ' active';
+            jump();
         });
+    }
+
+    function jump() {
+        console.log('in jump()');
+        var curTab = document.querySelector('.active');
+        switch (curTab.attributes['id'].value) {
+            case 'sidebar-recommend':
+                view.innerHTML = recommend();
+                break;
+            default:
+                break;
+        }
     }
 
     function recommend() {
