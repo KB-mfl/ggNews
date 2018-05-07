@@ -47,25 +47,7 @@ function getRecommend($conn) {
             <input placeholder="Search here">
             <button>Search</button>
         </div>
-        <div class="content">
-            <!-- <div class="carousel">
-                <img src="resourses/carousel01.jpeg">
-            </div>
-            <div class="news-list">
-                <?php
-                foreach ($news as $item) { ?>
-                <div class="item">
-                    <p class="title"><?php echo $item["title"]; ?></p>
-                    <div class="info">
-                        <span><?php echo $item["author"]; ?></span>
-                        <span><?php echo $item["created_time"]; ?></span>
-                    </div>
-                    <hr>
-                </div>
-                <?php
-                } ?>
-            </div> -->
-        </div>
+        <div class="content"></div>
     </div>
 </body>
 <script>
