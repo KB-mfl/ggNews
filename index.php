@@ -15,9 +15,11 @@ catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
 
-$sql = $conn->prepare('SELECT * FROM news WHERE `deleted_time` IS NULL;');
-$sql->execute();
-$news = $sql->fetchall(PDO::FETCH_ASSOC);
+function getRecommend($conn) {
+    $sql = $conn->prepare('SELECT * FROM news WHERE `deleted_time` IS NULL;');
+    $sql->execute();
+    return $sql->fetchall(PDO::FETCH_ASSOC);
+}
 
 ?>
 <!DOCTYPE html>
@@ -32,39 +34,87 @@ $news = $sql->fetchall(PDO::FETCH_ASSOC);
         <div class="sidebar">
             <a class="logo">GGnews</a>
             <ul>
-                <li>推荐</li>
-                <li>热点</li>
-                <li>图片</li>
-                <li>科技</li>
-                <li>娱乐</li>
-                <li>游戏</li>
+                <li id="sidebar-recommend" class="tab">推荐</li>
+                <li id="sidebar-hot" class="tab">热点</li>
+                <li id="sidebar-image" class="tab">图片</li>
+                <li id="sidebar-science" class="tab">科技</li>
+                <li id="sidebar-entertainment" class="tab">娱乐</li>
+                <li id="sidebar-game" class="tab">游戏</li>
             </ul>
         </div>
+        <div class="search">
+            <input placeholder="Search here">
+            <button>Search</button>
+        </div>
         <div class="content">
-            <div class="search">
-                <input placeholder="Search here">
-                <button>Search</button>
-            </div>
-            <div class="carousel">
-                <img src="resourses/carousel01.jpeg" width="600" height="300">
+            <!-- <div class="carousel">
+                <img src="resourses/carousel01.jpeg">
             </div>
             <div class="news-list">
                 <?php
                 foreach ($news as $item) { ?>
                 <div class="item">
-                    <p class="title"><?php echo $item['title']; ?></p>
+                    <p class="title"><?php echo $item["title"]; ?></p>
                     <div class="info">
-                        <span><?php echo $item['author']; ?></span>
-                        <span><?php echo $item['created_time']; ?></span>
+                        <span><?php echo $item["author"]; ?></span>
+                        <span><?php echo $item["created_time"]; ?></span>
                     </div>
                     <hr>
                 </div>
                 <?php
                 } ?>
-            </div>
+            </div> -->
         </div>
     </div>
 </body>
+<script>
+    var sidebar = document.querySelector('.sidebar');
+    var tabs = document.querySelectorAll('.tab');
+    tabs[0].className += ' active';
+
+    var view = document.querySelector('.content');
+    view.innerHTML = recommend();
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].addEventListener('click', function() {
+            var curTab = document.querySelector('.active');
+            curTab.className = curTab.className.replace('active', '');
+            this.className += ' active';
+        });
+    }
+
+    function recommend() {
+        var news = <?php echo json_encode(getRecommend($conn)); ?>;
+        console.log(news);
+
+        var HTML = 
+             '<div class="carousel">'
+            +    '<img src="resourses/carousel01.jpeg">'
+            +'</div>'
+            +'<div class="news-list">';
+
+        for (var i = 0; i < news.length; i++) {
+            HTML +=
+                 '<div class="item">'
+                +    '<p class="title">'
+                +        news[i].title
+                +    '</p>'
+                +    '<div class="info">'
+                +        '<span>'
+                +            news[i].author
+                +        '</span>'
+                +        '<span>'
+                +            news[i].created_time
+                +        '</span>'
+                +    '</div>'
+                +    '<hr>'
+                +'</div>';
+        }
+        HTML += '</div></div>';
+
+        console.log(HTML);
+        return HTML;
+    }
+</script>
 <style>
     .logo {
         font-size: 24px;
@@ -83,23 +133,24 @@ $news = $sql->fetchall(PDO::FETCH_ASSOC);
     .sidebar ul {
         padding: 0;
     }
-    .sidebar li {
+    .sidebar .tab {
         list-style-type: none;
         display: inline-block;
         width: 110px;
         height: 40px;
         line-height: 40px;
         border-radius: 5px;
+        margin-bottom: 5px;
         transition: background 200ms, color 200ms;
     }
-    .sidebar li:hover {
+    .sidebar .tab:hover, .sidebar .active {
         background: #3cafe9;
         cursor: pointer;
         color: #ffffff;
     }
     .content {
         float: left;
-        width: 600px;
+        width: 660px;
         height: 100%;
     }
     .search {
@@ -132,6 +183,10 @@ $news = $sql->fetchall(PDO::FETCH_ASSOC);
     }
     .carousel {
         margin-top: 30px;
+    }
+    .carousel img {
+        width: 660px;
+        height: 320px;
     }
     .item .title {
         font-size: 18px;
